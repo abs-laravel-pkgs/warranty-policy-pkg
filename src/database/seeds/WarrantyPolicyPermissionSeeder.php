@@ -12,29 +12,29 @@ class WarrantyPolicyPermissionSeeder extends Seeder {
 	 */
 	public function run() {
 		$permissions = [
-			//MASTER > CUSTOMERS
-			4400 => [
-				'display_order' => 10,
-				'parent_id' => 2,
-				'name' => 'customers',
-				'display_name' => 'Customers',
+			//WARRANTY POLICIES
+			5000 => [
+				'display_order' => 50,
+				'parent_id' => null,
+				'name' => 'warranty-policies',
+				'display_name' => 'Warranty Policies',
 			],
-			4401 => [
+			5001 => [
 				'display_order' => 1,
-				'parent_id' => 4400,
-				'name' => 'add-customer',
+				'parent_id' => 5000,
+				'name' => 'add-warranty-policy',
 				'display_name' => 'Add',
 			],
-			4402 => [
+			5002 => [
 				'display_order' => 2,
-				'parent_id' => 4400,
-				'name' => 'edit-customer',
+				'parent_id' => 5000,
+				'name' => 'edit-warranty-policy',
 				'display_name' => 'Edit',
 			],
-			4403 => [
+			5003 => [
 				'display_order' => 3,
-				'parent_id' => 4400,
-				'name' => 'delete-customer',
+				'parent_id' => 5000,
+				'name' => 'delete-warranty-policy',
 				'display_name' => 'Delete',
 			],
 
