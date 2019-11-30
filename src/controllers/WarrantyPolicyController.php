@@ -18,31 +18,30 @@ class WarrantyPolicyController extends Controller {
 	}
 
 	public function getWarrantyPolicyList() {
-		$customer_list = Customer::select(
-			'customers.id',
-			'customers.code',
-			'customers.name',
-			'customers.mobile_no',
-			'customers.email'
+		$warranty_policy_list = WarrantyPolicy::select(
+			'warranty_policies.id',
+			'warranty_policies.code',
+			'warranty_policies.name',
+			DB::raw('IF(warranty_policies.deleted_at IS NULL,"Active","Inactive") as status')
 		)
-			->where('customers.company_id', Auth::user()->company_id)
-			->orderby('customers.id', 'desc');
+			->where('warranty_policies.company_id', Auth::user()->company_id)
+			->orderby('warranty_policies.id', 'desc');
 
-		return Datatables::of($customer_list)
-		// ->addColumn('name', function ($customer_list) {
-		// 	$status = $customer_list->status == 'Active' ? 'green' : 'red';
-		// 	return '<span class="status-indicator ' . $status . '"></span>' . $customer_list->name;
-		// })
-			->addColumn('action', function ($customer_list) {
-				$edit_img = asset('public/theme/img/table/cndn/edit.svg');
-				$delete_img = asset('public/theme/img/table/cndn/delete.svg');
+		return Datatables::of($warranty_policy_list)
+			->addColumn('action', function ($warranty_policy_list) {
+				$edit = asset('public/img/content/table/edit-yellow.svg');
+				$edit_active = asset('public/img/content/table/edit-yellow-active.svg');
+				$delete = asset('/public/img/content/table/delete-default.svg');
+				$delete_active = asset('/public/img/content/table/delete-active.svg');
+				$view = asset('/public/img/content/table/eye.svg');
+				$view_active = asset('/public/img/content/table/eye-active.svg');
 				return '
-					<a href="#!/customer-pkg/customer/edit/' . $customer_list->id . '">
-						<img src="' . $edit_img . '" alt="View" class="img-responsive">
+					<a href="#!/warranty-policy-pkg/warranty-policy/view/' . $warranty_policy_list->id . '" title="View" dusk="view-btn"><img src="' . $view . '" alt="View" class="img-responsive" onmouseover="this.src="' . $view_active . '" onmouseout="this.src="' . $view . '" >
+					</a>
+					<a href="#!/warranty-policy-pkg/warranty-policy/edit/' . $warranty_policy_list->id . '" title="Edit" dusk="edit-btn"><img src="' . $edit . '" alt="Edit" class="img-responsive" onmouseover="this.src="' . $edit_active . '" onmouseout="this.src="' . $edit . '" >
 					</a>
 					<a href="javascript:;" data-toggle="modal" data-target="#delete_customer"
-					onclick="angular.element(this).scope().deleteCustomer(' . $customer_list->id . ')" dusk = "delete-btn" title="Delete">
-					<img src="' . $delete_img . '" alt="delete" class="img-responsive">
+					onclick="angular.element(this).scope().deleteCustomer(' . $warranty_policy_list->id . ')" dusk = "delete-btn" title="Delete"><img src="' . $delete . '" alt="Delete" class="img-responsive" onmouseover="this.src="' . $delete_active . '" onmouseout="this.src="' . $delete . '" >
 					</a>
 					';
 			})

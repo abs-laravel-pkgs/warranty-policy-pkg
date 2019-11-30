@@ -1,72 +1,61 @@
-app.component('customerList', {
-    templateUrl: customer_list_template_url,
+app.component('warrantyPolicyList', {
+    templateUrl: warranty_ploicy_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location) {
         $scope.loading = true;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
-        var table_scroll;
-        table_scroll = $('.page-main-content').height() - 37;
-        var dataTable = $('#customers_list').DataTable({
-            "dom": cndn_dom_structure,
+        var dataTable1 = $('#warranty_policy').DataTable({
+            stateSave: true,
+            "dom": dom_structure,
             "language": {
-                // "search": "",
-                // "searchPlaceholder": "Search",
-                "lengthMenu": "Rows _MENU_",
+                "search": "",
+                "lengthMenu": "Rows Per Page _MENU_",
                 "paginate": {
                     "next": '<i class="icon ion-ios-arrow-forward"></i>',
                     "previous": '<i class="icon ion-ios-arrow-back"></i>'
                 },
             },
-            pageLength: 10,
             processing: true,
-            stateSaveCallback: function(settings, data) {
-                localStorage.setItem('CDataTables_' + settings.sInstance, JSON.stringify(data));
-            },
-            stateLoadCallback: function(settings) {
-                var state_save_val = JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
-                if (state_save_val) {
-                    $('#search_customer').val(state_save_val.search.search);
-                }
-                return JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
-            },
             serverSide: true,
             paging: true,
-            stateSave: true,
-            ordering: false,
-            scrollY: table_scroll + "px",
-            scrollCollapse: true,
             ajax: {
-                url: laravel_routes['getCustomerList'],
+                url: laravel_routes['getWarrantyPolicyList'],
                 type: "GET",
                 dataType: "json",
                 data: function(d) {},
             },
-
             columns: [
-                { data: 'action', class: 'action', name: 'action', searchable: false },
-                { data: 'code', name: 'customers.code' },
-                { data: 'name', name: 'customers.name' },
-                { data: 'mobile_no', name: 'customers.mobile_no' },
-                { data: 'email', name: 'customers.email' },
+                { data: 'action', class: 'action', searchable: false },
+                { data: 'name', name: 'warranty_policies.name' },
+                { data: 'status', searchable: false },
             ],
+            "initComplete": function(settings, json) {
+                $('.dataTables_length select').select2();
+            },
             "infoCallback": function(settings, start, end, max, total, pre) {
                 $('#table_info').html(total)
-                $('.foot_info').html('Showing ' + start + ' to ' + end + ' of ' + max + ' entries')
             },
             rowCallback: function(row, data) {
                 $(row).addClass('highlight-row');
             }
+
         });
-        $('.dataTables_length select').select2();
+        /* Page Title Appended */
+        $('.page-header-content .display-inline-block .data-table-title').html('Warranty Policy List <span class="badge badge-secondary" id="table_info">0</span>');
+        $('.page-header-content .search.display-inline-block .add_close_button').html('<button type="button" class="btn btn-img btn-add-close"><img src="' + image_scr2 + '" class="img-responsive"></button>');
+        $('.page-header-content .refresh.display-inline-block').html('<button type="button" class="btn btn-refresh"><img src="' + image_scr3 + '" class="img-responsive"></button>');
+        $('.add_new_button').html(
+            '<a href="#!/warranty-policy-pkg/warranty-policy/add" type="button" class="btn btn-secondary">' +
+            'Add New' +
+            '</a>'
+        );
 
-        $scope.clear_search = function() {
-            $('#search_customer').val('');
-            $('#customers_list').DataTable().search('').draw();
-        }
+        $('.btn-add-close').on("click", function() {
+            $('#warranty_policy').DataTable().search('').draw();
+        });
 
-        var dataTables = $('#customers_list').dataTable();
-        $("#search_customer").keyup(function() {
-            dataTables.fnFilter(this.value);
+        $('.btn-refresh').on("click", function() {
+            $('#warranty_policy').DataTable().ajax.reload();
         });
 
         $scope.deleteCustomer = function($id) {
@@ -75,19 +64,19 @@ app.component('customerList', {
         $scope.deleteConfirm = function() {
             $id = $('#customer_id').val();
             $http.get(
-                customer_delete_data_url + '/' + $id,
+                warranty_ploicy_delete_data_url + '/' + $id,
             ).then(function(response) {
                 if (response.data.success) {
                     $noty = new Noty({
                         type: 'success',
                         layout: 'topRight',
-                        text: 'Customer Deleted Successfully',
+                        text: 'Warranty Policy Deleted Successfully',
                     }).show();
                     setTimeout(function() {
                         $noty.close();
                     }, 3000);
-                    $('#customers_list').DataTable().ajax.reload(function(json) {});
-                    $location.path('/customer-pkg/customer/list');
+                    $('#warranty_policy_list').DataTable().ajax.reload(function(json) {});
+                    $location.path('/warranty-policy-pkg/warranty-policy/list');
                 }
             });
         }
@@ -96,10 +85,10 @@ app.component('customerList', {
 });
 //------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------
-app.component('customerForm', {
-    templateUrl: customer_form_template_url,
+app.component('warrantyPolicyForm', {
+    templateUrl: warranty_ploicy_form_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
-        get_form_data_url = typeof($routeParams.id) == 'undefined' ? customer_get_form_data_url : customer_get_form_data_url + '/' + $routeParams.id;
+        get_form_data_url = typeof($routeParams.id) == 'undefined' ? warranty_ploicy_get_form_data_url : warranty_ploicy_get_form_data_url + '/' + $routeParams.id;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
         self.angular_routes = angular_routes;
@@ -260,7 +249,7 @@ app.component('customerForm', {
                             setTimeout(function() {
                                 $noty.close();
                             }, 3000);
-                            $location.path('/customer-pkg/customer/list');
+                            $location.path('/warranty-policy-pkg/warranty-policy/list');
                             $scope.$apply();
                         } else {
                             if (!res.success == true) {
@@ -279,7 +268,7 @@ app.component('customerForm', {
                                 }, 3000);
                             } else {
                                 $('#submit').button('reset');
-                                $location.path('/customer-pkg/customer/list');
+                                $location.path('/warranty-policy-pkg/warranty-policy/list');
                                 $scope.$apply();
                             }
                         }
