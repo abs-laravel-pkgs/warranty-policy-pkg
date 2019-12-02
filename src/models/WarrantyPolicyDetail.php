@@ -10,14 +10,17 @@ class WarrantyPolicyDetail extends Model {
 	protected $table = 'warranty_policy_details';
 	public $timestamps = false;
 	protected $fillable = [
-		'code',
-		'name',
-		'cust_group',
-		'dimension',
-		'mobile_no',
-		'email',
-		'company_id',
+		'warranty_policy_id',
+		'warranty_type_id',
+		'duration_type_id',
+		'duration',
+		'more_info',
+		'priority',
 	];
+
+	public function warrantyPolicy() {
+		return $this->belongsTo('Abs\WarrantyPolicyPkg\WarrantyPolicy', 'warranty_policy_id', 'id');
+	}
 
 	public static function createFromObject($record_data) {
 

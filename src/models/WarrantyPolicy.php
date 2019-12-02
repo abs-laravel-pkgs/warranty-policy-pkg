@@ -10,14 +10,16 @@ class WarrantyPolicy extends Model {
 	protected $table = 'warranty_policies';
 	public $timestamps = false;
 	protected $fillable = [
-		'code',
-		'name',
-		'cust_group',
-		'dimension',
-		'mobile_no',
-		'email',
 		'company_id',
+		'name',
+		'created_by_id',
+		'updated_by_id',
+		'deleted_by_id',
 	];
+
+	public function warrantyPolicyDetails() {
+		return $this->hasMany('Abs\WarrantyPolicyPkg\WarrantyPolicyDetail', 'warranty_policy_id')->orderBy('priority', 'asc');
+	}
 
 	public static function createFromObject($record_data) {
 
