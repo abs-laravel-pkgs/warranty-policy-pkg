@@ -22,12 +22,39 @@ class WarrantyPolicyDetail extends Model {
 		return $this->belongsTo('Abs\WarrantyPolicyPkg\WarrantyPolicy', 'warranty_policy_id', 'id');
 	}
 
-	public static function createFromObject($record_data) {
+	public static function createFromCollection($records, $company = null, $specific_company = null, $tc) {
+		foreach ($records as $key => $record_data) {
+			try {
+				if (!$record_data->company_code) {
+					continue;
+				}
 
+				if ($specific_company) {
+					if ($record_data->company_code != $specific_company->code) {
+						continue;
+					}
+				}
+
+				if ($tc) {
+					if ($record_data->tc != $tc) {
+						continue;
+					}
+				}
+
+				$record = self::createFromObject($record_data, $company);
+			} catch (Exception $e) {
+				dd($e);
+			}
+		}
+	}
+
+	public static function createFromObject($record_data, $company = null) {
 		$errors = [];
-		$company = Company::where('code', $record_data->company)->first();
 		if (!$company) {
-			dump('Invalid Company : ' . $record_data->company);
+			$company = Company::where('code', $record_data->company_code)->first();
+		}
+		if (!$company) {
+			dump('Invalid Company : ' . $record_data->company_code);
 			return;
 		}
 
@@ -37,9 +64,19 @@ class WarrantyPolicyDetail extends Model {
 			return;
 		}
 
-		$type = Config::where('name', $record_data->type)->where('config_type_id', 89)->first();
-		if (!$type) {
-			$errors[] = 'Invalid Tax Type : ' . $record_data->type;
+		$wp = WarrantyPolicy::where('code', $record_data->warranty_policy_code)->where('company_id', $company->id)->first();
+		if (!$wp) {
+			$errors[] = 'Invalid warranty_policy_code : ' . $record_data->warranty_policy_code;
+		}
+
+		$warranty_type = Config::where('name', $record_data->warranty_type)->where('config_type_id', 7015)->first();
+		if (!$warranty_type) {
+			$errors[] = 'Invalid warranty_type : ' . $record_data->warranty_type;
+		}
+
+		$duration_type = Config::where('name', $record_data->duration_type)->where('config_type_id', 7011)->first();
+		if (!$duration_type) {
+			$errors[] = 'Invalid duration_type : ' . $record_data->duration_type;
 		}
 
 		if (count($errors) > 0) {
@@ -48,26 +85,14 @@ class WarrantyPolicyDetail extends Model {
 		}
 
 		$record = self::firstOrNew([
-			'company_id' => $company->id,
-			'name' => $record_data->tax_name,
+			'warranty_policy_id' => $wp->id,
+			'warranty_type_id' => $warranty_type->id,
+			'duration_type_id' => $duration_type->id,
+			'duration' => $record_data->duration,
 		]);
-		$record->type_id = $type->id;
-		$record->created_by_id = $admin->id;
+		$record->more_info = $record_data->more_info;
+		$record->priority = $record_data->priority;
 		$record->save();
-		return $record;
-	}
-
-	public static function createFromCollection($records) {
-		foreach ($records as $key => $record_data) {
-			try {
-				if (!$record_data->company) {
-					continue;
-				}
-				$record = self::createFromObject($record_data);
-			} catch (Exception $e) {
-				dd($e);
-			}
-		}
 	}
 
 }

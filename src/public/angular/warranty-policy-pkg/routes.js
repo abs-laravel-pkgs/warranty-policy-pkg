@@ -4,14 +4,14 @@ app.config(['$routeProvider', function($routeProvider) {
     //CUSTOMER
     when('/warranty-policy-pkg/warranty-policy/list', {
         template: '<warranty-policy-list></warranty-policy-list>',
-        title: 'Sub Customers',
+        title: 'Warranty Policies',
     }).
     when('/warranty-policy-pkg/warranty-policy/add', {
         template: '<warranty-policy-form></warranty-policy-form>',
-        title: 'Add Sub Customer',
+        title: 'Add Warranty Policy',
     }).
     when('/warranty-policy-pkg/warranty-policy/edit/:id', {
         template: '<warranty-policy-form></warranty-policy-form>',
-        title: 'Edit Sub Customer',
+        title: 'Edit Warranty Policy',
     });
 }]);
