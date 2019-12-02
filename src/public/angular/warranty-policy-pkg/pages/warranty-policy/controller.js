@@ -4,7 +4,7 @@ app.component('warrantyPolicyList', {
         $scope.loading = true;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
-        var dataTable1 = $('#warranty_policy').DataTable({
+        var dataTable = $('#warranty_policy').DataTable({
             stateSave: true,
             "dom": dom_structure,
             "language": {
@@ -58,11 +58,11 @@ app.component('warrantyPolicyList', {
             $('#warranty_policy').DataTable().ajax.reload();
         });
 
-        $scope.deleteCustomer = function($id) {
-            $('#customer_id').val($id);
+        $scope.deleteWarrantyPolicy = function($id) {
+            $('#warranty_policy_id').val($id);
         }
         $scope.deleteConfirm = function() {
-            $id = $('#customer_id').val();
+            $id = $('#warranty_policy_id').val();
             $http.get(
                 warranty_ploicy_delete_data_url + '/' + $id,
             ).then(function(response) {
@@ -101,6 +101,7 @@ app.component('warrantyPolicyForm', {
             self.warranty_type_list = response.data.warranty_type_list;
             self.duration_type_list = response.data.duration_type_list;
             self.action = response.data.action;
+            self.policy_detail_removal_id = [];
             if (self.action == 'Edit') {
                 if (self.policy.deleted_at) {
                     self.switch_value = 'Inactive';
@@ -114,13 +115,20 @@ app.component('warrantyPolicyForm', {
             $rootScope.loading = false;
         });
 
-        /* Pane Next Button */
+        /* Tab Funtion */
         $('.btn-nxt').on("click", function() {
             $('.editDetails-tabs li.active').next().children('a').trigger("click");
+            tabPaneFooter();
         });
         $('.btn-prev').on("click", function() {
             $('.editDetails-tabs li.active').prev().children('a').trigger("click");
+            tabPaneFooter();
         });
+        $('.btn-pills').on("click", function() {
+            tabPaneFooter();
+        });
+        $scope.btnNxt = function() {}
+        $scope.prev = function() {}
 
         //ADD POLICY DETAILS 
         $scope.add_policy_details = function() {

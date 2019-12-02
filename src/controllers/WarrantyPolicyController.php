@@ -34,15 +34,15 @@ class WarrantyPolicyController extends Controller {
 				$edit_active = asset('public/img/content/table/edit-yellow-active.svg');
 				$delete = asset('/public/img/content/table/delete-default.svg');
 				$delete_active = asset('/public/img/content/table/delete-active.svg');
-				$view = asset('/public/img/content/table/eye.svg');
+				$view = asset('public/img/content/table/eye.svg');
 				$view_active = asset('/public/img/content/table/eye-active.svg');
 				return '
-					<a href="#!/warranty-policy-pkg/warranty-policy/view/' . $warranty_policy_list->id . '" title="View" dusk="view-btn"><img src="' . $view . '" alt="View" class="img-responsive" onmouseover="this.src="' . $view_active . '" onmouseout="this.src="' . $view . '" >
+					<a href="#!/warranty-policy-pkg/warranty-policy/view/' . $warranty_policy_list->id . '" title="View" dusk="view-btn"><img src="' . $view . '" alt="View" class="img-responsive" onmouseover=this.src="' . $view_active . '" onmouseout=this.src="' . $view . '" >
 					</a>
-					<a href="#!/warranty-policy-pkg/warranty-policy/edit/' . $warranty_policy_list->id . '" title="Edit" dusk="edit-btn"><img src="' . $edit . '" alt="Edit" class="img-responsive" onmouseover="this.src="' . $edit_active . '" onmouseout="this.src="' . $edit . '" >
+					<a href="#!/warranty-policy-pkg/warranty-policy/edit/' . $warranty_policy_list->id . '" title="Edit" dusk="edit-btn"><img src="' . $edit . '" alt="Edit" class="img-responsive" onmouseover=this.src="' . $edit_active . '" onmouseout=this.src="' . $edit . '" >
 					</a>
-					<a href="javascript:;" data-toggle="modal" data-target="#delete_customer"
-					onclick="angular.element(this).scope().deleteCustomer(' . $warranty_policy_list->id . ')" dusk = "delete-btn" title="Delete"><img src="' . $delete . '" alt="Delete" class="img-responsive" onmouseover="this.src="' . $delete_active . '" onmouseout="this.src="' . $delete . '" >
+					<a href="javascript:;" data-toggle="modal" data-target="#delete_warranty_policy"
+					onclick="angular.element(this).scope().deleteWarrantyPolicy(' . $warranty_policy_list->id . ')" dusk = "delete-btn" title="Delete"><img src="' . $delete . '" alt="Delete" class="img-responsive" onmouseover=this.src="' . $delete_active . '" onmouseout=this.src="' . $delete . '" >
 					</a>
 					';
 			})
@@ -114,6 +114,11 @@ class WarrantyPolicyController extends Controller {
 			}
 
 			DB::beginTransaction();
+			if (!empty($request->policy_detail_removal_id)) {
+				$removal_id = json_decode($request->policy_detail_removal_id);
+				$policy_details_remove = WarrantyPolicyDetail::whereIn('id', $removal_id)->delete();
+			}
+
 			if (!$request->id) {
 				$warranty_policy = new WarrantyPolicy;
 				$warranty_policy->created_by_id = Auth::user()->id;
@@ -154,10 +159,9 @@ class WarrantyPolicyController extends Controller {
 			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
 		}
 	}
-	public function deleteCustomer($id) {
-		$delete_status = Customer::where('id', $id)->forceDelete();
+	public function deleteWarrantyPolicy($id) {
+		$delete_status = WarrantyPolicy::where('id', $id)->forceDelete();
 		if ($delete_status) {
-			$address_delete = Address::where('address_of_id', 24)->where('entity_id', $id)->forceDelete();
 			return response()->json(['success' => true]);
 		}
 	}
