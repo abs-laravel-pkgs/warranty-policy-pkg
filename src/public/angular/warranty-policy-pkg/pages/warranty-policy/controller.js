@@ -95,54 +95,46 @@ app.component('warrantyPolicyForm', {
         $http.get(
             get_form_data_url
         ).then(function(response) {
-            // console.log(response);
-            self.customer = response.data.customer;
-            self.address = response.data.address;
-            self.country_list = response.data.country_list;
+            console.log(response);
+            self.policy = response.data.warranty_policy;
+            self.policy_details = response.data.warranty_policy_details;
+            self.warranty_type_list = response.data.warranty_type_list;
+            self.duration_type_list = response.data.duration_type_list;
             self.action = response.data.action;
-            $rootScope.loading = false;
             if (self.action == 'Edit') {
-                $scope.onSelectedCountry(self.address.country_id);
-                $scope.onSelectedState(self.address.state_id);
+                if (self.policy.deleted_at) {
+                    self.switch_value = 'Inactive';
+                } else {
+                    self.switch_value = 'Active';
+                }
             } else {
-                self.state_list = [{ id: '', name: 'Select State' }];
-                self.city_list = [{ 'id': '', 'name': 'Select City' }];
+                $scope.add_policy_details();
+                self.switch_value = 'Active';
             }
+            $rootScope.loading = false;
         });
 
-        /* Tab Funtion */
+        /* Pane Next Button */
         $('.btn-nxt').on("click", function() {
-            $('.cndn-tabs li.active').next().children('a').trigger("click");
-            tabPaneFooter();
+            $('.editDetails-tabs li.active').next().children('a').trigger("click");
         });
         $('.btn-prev').on("click", function() {
-            $('.cndn-tabs li.active').prev().children('a').trigger("click");
-            tabPaneFooter();
+            $('.editDetails-tabs li.active').prev().children('a').trigger("click");
         });
-        $('.btn-pills').on("click", function() {
-            tabPaneFooter();
-        });
-        $scope.btnNxt = function() {}
-        $scope.prev = function() {}
 
-        //SELECT STATE BASED COUNTRY
-        $scope.onSelectedCountry = function(id) {
-            $http.get(
-                customer_get_state_list_data + '/' + id
-            ).then(function(response) {
-                // console.log(response);
-                self.state_list = response.data.state_list;
-            });
+        //ADD POLICY DETAILS 
+        $scope.add_policy_details = function() {
+            self.policy_details.push({});
         }
 
-        //SELECT CITY BASED STATE
-        $scope.onSelectedState = function(id) {
-            $http.get(
-                customer_get_city_list_data + '/' + id
-            ).then(function(response) {
-                // console.log(response);
-                self.city_list = response.data.city_list;
-            });
+        //REMOVE POLICY DETAILS 
+        $scope.removePolicy = function(index, id) {
+            console.log(id, index);
+            if (id) {
+                self.policy_detail_removal_id.push(id);
+                $('#policy_detail_removal_id').val(JSON.stringify(self.policy_detail_removal_id));
+            }
+            self.policy_details.splice(index, 1);
         }
 
         var form_id = '#form';
@@ -159,65 +151,6 @@ app.component('warrantyPolicyForm', {
                     minlength: 3,
                     maxlength: 255,
                 },
-                'cust_group': {
-                    maxlength: 100,
-                },
-                'dimension': {
-                    maxlength: 50,
-                },
-                'mobile_no': {
-                    required: true,
-                    minlength: 10,
-                    maxlength: 25,
-                },
-                'email': {
-                    required: true,
-                    email: true,
-                    minlength: 6,
-                    maxlength: 255,
-                },
-                'address_line1': {
-                    minlength: 3,
-                    maxlength: 255,
-                },
-                'address_line2': {
-                    minlength: 3,
-                    maxlength: 255,
-                },
-                'pincode': {
-                    required: true,
-                    minlength: 6,
-                    maxlength: 6,
-                },
-            },
-            messages: {
-                'code': {
-                    maxlength: 'Maximum of 255 charaters',
-                },
-                'name': {
-                    maxlength: 'Maximum of 255 charaters',
-                },
-                'cust_group': {
-                    maxlength: 'Maximum of 100 charaters',
-                },
-                'dimension': {
-                    maxlength: 'Maximum of 50 charaters',
-                },
-                'mobile_no': {
-                    maxlength: 'Maximum of 25 charaters',
-                },
-                'email': {
-                    maxlength: 'Maximum of 100 charaters',
-                },
-                'address_line1': {
-                    maxlength: 'Maximum of 255 charaters',
-                },
-                'address_line2': {
-                    maxlength: 'Maximum of 255 charaters',
-                },
-                'pincode': {
-                    maxlength: 'Maximum of 6 charaters',
-                },
             },
             invalidHandler: function(event, validator) {
                 $noty = new Noty({
@@ -233,7 +166,7 @@ app.component('warrantyPolicyForm', {
                 let formData = new FormData($(form_id)[0]);
                 $('#submit').button('loading');
                 $.ajax({
-                        url: laravel_routes['saveCustomer'],
+                        url: laravel_routes['saveWarrantyPolicy'],
                         method: "POST",
                         data: formData,
                         processData: false,

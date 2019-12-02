@@ -1,166 +1,168 @@
-<!-- Content Wrap -->
-<div class="content-wrap cndn-wrap">
-    <!-- Page Header -->
+<!--Content Wrap -->
+<div class="content-wrap">
     <div class="page-header">
-        <div class="page-header-inner">
-            <div class="page-header-content-left">
-                <div class="page-header-content button-block">
-                    <a href="#!/customer-pkg/customer/list" type="button" class="btn-back btn-img"><img class="img-responsive" src="./public/theme/img/content/previous.svg" alt="Back" /></a>
-                </div><!-- Page Header Content -->
-                <div class="page-header-content title-block">
-                    <h1 class="title"><b>{{$ctrl.action}} Customer</b></h1>
-                    <p class="subtitle"><a href="#!/customer-pkg/customer/list">Customer List</a> / {{$ctrl.action}}</p>
-                </div><!-- Page Header Content -->
-            </div><!-- Page Header Content Left -->
-        </div><!-- Page Header Inner -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header-content">
+                        <div class="page-header-inner page-title display-inline-block">
+                            <div class="previous-page">
+                                <a href="#!/warranty-policy-pkg/warranty-policy/list"><img src="./public/img/content/previous.svg" class="img-responsive"></a>
+                            </div>
+                        </div><!-- Page Header Inner -->
+                        <div class="page-header-inner page-title display-inline-block">
+                            <h3 class="title">{{$ctrl.action}} Warranty Policy</h3>
+                        </div><!-- Page Header Inner -->
+                    </div><!-- Page Header Content -->
+                </div><!-- Col Main -->
+            </div><!-- Row -->
+        </div><!-- Container -->
     </div><!-- Page Header -->
     <!-- Page Main Content -->
-    <div class="page-main-content form-content type2">
+    <div class="page-main-content">
         <form id="form" autocomplete="off">
-            <input type="hidden" name="id" value="{{$ctrl.customer.id}}">
-            <div class="page-tab-form pb-70">
-                <div class="tab-form-wrap">
-                    <div class="tab-form-header">
-                        <div class="tab-header">
-                            <!-- Filters -->
-                            <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
-                                <ul class="nav nav-pills cndn-tabs">
-                                    <li class="active"><a class="filter active" data-target="#general-information" data-toggle="tab" aria-expanded="true">General Information</a></li>
-                                    <li><a data-target="#address-details" data-toggle="tab" aria-expanded="true" class="filter">Address Details</a></li>
-                                </ul>
-                            </div><!-- Filters -->
-                        </div><!-- Tab Header -->
-                    </div><!-- Tab Form Header -->
-                    <div class="tab-form-body">
-                        <div class="tab-content">
-                            <!-- TAB PANEL -->
-                            <div class="tab-pane fade in active" id="general-information" data-animation="fadeInUp" data-animation-delay="300">
-                                <div class="tab-pane-wrap">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Customer Code <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.customer.code" name="code" placeholder="Enter Customer Code" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Customer Name <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.customer.name" name="name" placeholder="Enter Customer Name" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Mobile Number <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.customer.mobile_no" name="mobile_no" placeholder="Enter Mobile Number" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Email <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.customer.email" name="email" placeholder="Enter Email" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Customer Group</label>
-                                                <input type="text" class="form-control" ng-model="$ctrl.customer.cust_group" name="cust_group" placeholder="Enter Customer Group" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Dimension</label>
-                                                <input type="text" class="form-control" ng-model="$ctrl.customer.dimension" name="dimension" placeholder="Enter Dimension" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
+            <input type="hidden" name="id" value="{{$ctrl.policy.id}}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="tab-page-wrap">
+                            <div class="tab-page-header">
+                                <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
+                                    <ul class="nav nav-pills editDetails-tabs">
+                                        <li class="active"><a data-target="#general-info" role="tab" data-toggle="tab" aria-expanded="true">General Information</a></li>
+                                        <li><a data-target="#policy-details" data-toggle="tab" role="tab" aria-expanded="true">Policy Details</a></li>
+                                    </ul>
+                                </div><!-- Filters -->
+                            </div><!-- Tab Page Wrap Header -->
+                            <div class="tab-page-body">
+                                <div class="tab-content">
+                                    <div class="tab-pane fade in active" id="general-info" data-animation="fadeInUp" data-animation-delay="300">
+                                        <div class="form-page">
+                                            <div class="row custom-row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <lable>Policy Code<span class="mandatory">*</span></lable>
+                                                        <input type="text" name="code" ng-model='$ctrl.policy.code' class="form-control required" placeholder="Enter Policy Code">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <lable>Policy Name<span class="mandatory">*</span></lable>
+                                                        <input type="text" name="name" ng-model='$ctrl.policy.name' class="form-control required" placeholder="Enter Policy Name">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Active Status<span class="mandatory">*</span></label>
+                                                        <md-switch ng-model="$ctrl.switch_value" aria-label="Switch 2" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn">
+                                                            {{ $ctrl.switch_value }}
+                                                        </md-switch>
+                                                        <input type="hidden" name="status" value="{{$ctrl.switch_value}}">
+                                                    </div><!-- Field -->
+                                                </div><!-- Column -->
+                                            </div><!-- Row -->
+                                        </div><!-- Form Page -->
                                         <div class="tab-pane-footer">
                                             <div class="row">
-                                                <div class="col-md-12">
+                                                <div class="col-md-12 text-right">
                                                     <a class="btn btn-primary btn-nxt">Next</a>
                                                 </div>
                                             </div>
-                                        </div><!-- Tab Footer -->
-                                    </div><!-- Row -->
-                                </div><!-- Tab Pane Wrap -->
-                            </div><!-- Tabe Pane -->
-                            <div class="tab-pane fade" id="address-details" data-animation="fadeInUp" data-animation-delay="300">
-                                <div class="tab-pane-wrap">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Address Line 1 <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.address.address_line1" name="address_line1" placeholder="Enter Address Line 1" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Address Line 2</label>
-                                                <input type="text" class="form-control" ng-model="$ctrl.address.address_line2" name="address_line2" placeholder="Enter Address Line 2" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Country <sup class="mandatory">*</sup></label>
-                                                <md-select ng-model="$ctrl.address.country_id" ng-change="onSelectedCountry($ctrl.address.country_id);$ctrl.address.state_id='';$ctrl.address.city_id=''" placeholder="Select Country" data-md-container-class="selectdemoSelectHeader">
-                                                    <md-select-header class="demo-select-header ng-hide">
-                                                        <input ng-model="searchCustomerGroup" type="search" placeholder="Search Customer Group" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
-                                                    </md-select-header>
-                                                    <md-optgroup label="Customer Group List">
-                                                        <md-option ng-value="country.id" ng-repeat="country in $ctrl.country_list | filter:searchTravel">{{country.name}}</md-option>
-                                                    </md-optgroup>
-                                                </md-select>
-                                                <input type="hidden" name="country_id" value='{{$ctrl.address.country_id}}' class="required">
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>State <sup class="mandatory">*</sup></label>
-                                                <md-select ng-model="$ctrl.address.state_id" ng-change="onSelectedState($ctrl.address.state_id);$ctrl.address.city_id=''" placeholder="Select State" data-md-container-class="selectdemoSelectHeader">
-                                                    <md-select-header class="demo-select-header ng-hide">
-                                                        <input ng-model="searchCustomerGroup" type="search" placeholder="Search Customer Group" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
-                                                    </md-select-header>
-                                                    <md-optgroup label="">
-                                                        <md-option ng-value="state.id" ng-repeat="state in $ctrl.state_list | filter:searchTravel">{{state.name}}</md-option>
-                                                    </md-optgroup>
-                                                </md-select>
-                                                <input type="hidden" name="state_id" value='{{$ctrl.address.state_id}}' class="required">
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>City <sup class="mandatory">*</sup></label>
-                                                <md-select ng-model="$ctrl.address.city_id" placeholder="Select City" data-md-container-class="selectdemoSelectHeader">
-                                                    <md-select-header class="demo-select-header ng-hide">
-                                                        <input ng-model="searchCustomerGroup" type="search" placeholder="Search Customer Group" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
-                                                    </md-select-header>
-                                                    <md-optgroup label="">
-                                                        <md-option ng-value="city.id" ng-repeat="city in $ctrl.city_list | filter:searchTravel">{{city.name}}</md-option>
-                                                    </md-optgroup>
-                                                </md-select>
-                                                <input type="hidden" name="city_id" value='{{$ctrl.address.city_id}}' class="required">
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Pincode<sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.address.pincode" name="pincode" placeholder="Enter Pincode" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
-                                            </div><!-- Feild -->
+                                        </div>
+                                    </div><!-- Tab Pane -->
+                                    <div class="tab-pane fade" id="policy-details" data-animation="fadeInUp" data-animation-delay="300">
+                                        <div class="form-page">
+                                            <div class="row">
+                                                <div class="col-lg-8 col-md-10">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-form">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Type <sup class="mandatory">*</sup></th>
+                                                                    <th>Duration <sup class="mandatory">*</sup></th>
+                                                                    <th>Duration Type <sup class="mandatory">*</sup></th>
+                                                                    <th>More Info</th>
+                                                                    <th>Priority <sup class="mandatory">*</sup></th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="(index, policy_detail) in $ctrl.policy_details">
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <input type="hidden" name="policy_details[{{index}}][id]" value="{{policy_detail.id}}">
+                                                                            <md-select ng-model="policy_detail.warranty_type_id" placeholder="Select Type" data-md-container-class="selectdemoSelectHeader">
+                                                                                <md-select-header class="demo-select-header ng-hide">
+                                                                                    <input ng-model="searchWarrantyType" type="search" placeholder="Search Type" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                                                </md-select-header>
+                                                                                <md-optgroup label="Warranty Type List">
+                                                                                    <md-option ng-value="warranty_type.id" ng-repeat="warranty_type in $ctrl.warranty_type_list | filter:searchTravel">{{warranty_type.name}}</md-option>
+                                                                                </md-optgroup>
+                                                                            </md-select>
+                                                                            <input type="hidden" name="policy_details[{{index}}][warranty_type_id]" value='{{policy_detail.warranty_type_id}}' class="required">
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <input type="text" name="policy_details[{{index}}][duration]" ng-model='policy_detail.duration' class="form-control required" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Item Code">
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <md-select ng-model="policy_detail.duration_type_id" placeholder="Select Duration Type" data-md-container-class="selectdemoSelectHeader">
+                                                                                <md-select-header class="demo-select-header ng-hide">
+                                                                                    <input ng-model="searchDurationType" type="search" placeholder="Search Duration Type" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                                                </md-select-header>
+                                                                                <md-optgroup label="Duration Type List">
+                                                                                    <md-option ng-value="duration_type.id" ng-repeat="duration_type in $ctrl.duration_type_list | filter:searchTravel">{{duration_type.name}}</md-option>
+                                                                                </md-optgroup>
+                                                                            </md-select>
+                                                                            <input type="hidden" name="policy_details[{{index}}][duration_type_id]" value='{{policy_detail.duration_type_id}}' class="required">
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <input type="text" name="policy_details[{{index}}][more_info]" ng-model='policy_detail.more_info' class="form-control" placeholder="Enter More Info">
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <input type="text" name="policy_details[{{index}}][priority]" ng-model='policy_detail.priority' class="form-control required" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Priority">
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="javascript:;" ng-click="removePolicy(index,policy_detail.id)"><img src="./public/img/content/close-circle.svg" class="img-responsive" alt="Delete" /></a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="6">
+                                                                        <button type="button" class="btn btn-primary-light btn-square" ng-click="add_policy_details()">+ Add Policy Detail</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                        <input type="hidden" name="policy_detail_removal_id" id="policy_detail_removal_id">
+                                                    </div>
+                                                </div><!-- Row -->
+                                            </div><!-- Form Page -->
                                         </div><!-- Column -->
                                         <div class="tab-pane-footer">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <a class="btn btn-secondary btn-prev">Previous</a>
-                                                    <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+                                                <div class="col-md-12 text-right">
+                                                    <a class="btn btn-primary btn-prev">Previous</a>
+                                                    <button type="submit" class="btn btn-primary" id="submit">Submit</button>
                                                 </div>
                                             </div>
-                                        </div><!-- Tab Footer -->
-                                    </div><!-- Row -->
-                                </div><!-- Tab Pane Wrap -->
-                            </div><!-- Tabe Pane -->
-                        </div><!-- Tab Content -->
-                    </div><!-- Tab Form Body -->
-                </div><!-- Tab Form Wrap -->
-            </div><!-- Page Form -->
+                                        </div>
+                                    </div><!-- Tab Pane -->
+                                </div><!-- Tab Content -->
+                            </div><!-- Tab Page Wrap Body -->
+                        </div><!-- Tab Page Wrap -->
+                    </div><!-- Column -->
+                </div><!-- Row -->
+            </div><!-- Container -->
         </form>
     </div><!-- Page Main Content -->
 </div><!-- Content Wrap -->

@@ -1,12 +1,12 @@
 <?php
 
 namespace Abs\WarrantyPolicyPkg;
-use Abs\WarrantyPolicyPkg\Customer;
-use App\Address;
-use App\Country;
+use Abs\WarrantyPolicyPkg\WarrantyPolicy;
+use Abs\WarrantyPolicyPkg\WarrantyPolicyDetail;
+use App\Config;
 use App\Http\Controllers\Controller;
-use App\State;
 use Auth;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
@@ -18,12 +18,13 @@ class WarrantyPolicyController extends Controller {
 	}
 
 	public function getWarrantyPolicyList() {
-		$warranty_policy_list = WarrantyPolicy::select(
-			'warranty_policies.id',
-			'warranty_policies.code',
-			'warranty_policies.name',
-			DB::raw('IF(warranty_policies.deleted_at IS NULL,"Active","Inactive") as status')
-		)
+		$warranty_policy_list = WarrantyPolicy::withTrashed()
+			->select(
+				'warranty_policies.id',
+				'warranty_policies.code',
+				'warranty_policies.name',
+				DB::raw('IF(warranty_policies.deleted_at IS NULL,"Active","Inactive") as status')
+			)
 			->where('warranty_policies.company_id', Auth::user()->company_id)
 			->orderby('warranty_policies.id', 'desc');
 
@@ -48,92 +49,105 @@ class WarrantyPolicyController extends Controller {
 			->make(true);
 	}
 
-	public function getCustomerFormData($id = NULL) {
+	public function getWarrantyPolicyFormData($id = NULL) {
 		if (!$id) {
-			$customer = new Customer;
-			$address = new Address;
+			$warranty_policy = new WarrantyPolicy;
+			$warranty_policy_details = new WarrantyPolicyDetail;
 			$action = 'Add';
 		} else {
-			$customer = Customer::find($id);
-			$address = Address::where('address_of_id', 24)->where('entity_id', $id)->first();
+			$warranty_policy = WarrantyPolicy::withTrashed()->find($id);
+			$warranty_policy_details = WarrantyPolicyDetail::where('warranty_policy_id', $id)->get();
 			$action = 'Edit';
 		}
-		$this->data['country_list'] = $country_list = Collect(Country::select('id', 'name')->get())->prepend(['id' => '', 'name' => 'Select Country']);
-		$this->data['customer'] = $customer;
-		$this->data['address'] = $address;
+		$this->data['warranty_type_list'] = Config::getWarrantyType();
+		$this->data['duration_type_list'] = Config::getWarrantyDurationType();
+		$this->data['warranty_policy'] = $warranty_policy;
+		$this->data['warranty_policy_details'] = $warranty_policy_details;
 		$this->data['action'] = $action;
 
 		return response()->json($this->data);
 	}
 
-	public function getStateList($id) {
-		$state_list = Country::getState($id);
-		return response()->json($state_list);
-	}
-	public function getCityList($id) {
-		$city_list = State::getCity($id);
-		return response()->json($city_list);
-	}
-
-	public function saveCustomer(Request $request) {
+	public function saveWarrantyPolicy(Request $request) {
 		// dd($request->all());
 		try {
 			$error_messages = [
-				'code.required' => 'Customer Code is Required',
-				'code.max' => 'Maximum 255 Characters',
+				'code.required' => 'Policy Code is Required',
+				'code.max' => 'Maximum 191 Characters',
 				'code.min' => 'Minimum 3 Characters',
-				'name.required' => 'Customer Name is Required',
-				'name.max' => 'Maximum 255 Characters',
+				'code.unique' => 'Policy Code is Already taken',
+				'name.required' => 'Policy Code is Required',
+				'name.max' => 'Maximum 191 Characters',
 				'name.min' => 'Minimum 3 Characters',
-				'mobile_no.required' => 'Mobile Number is Required',
-				'mobile_no.max' => 'Maximum 25 Numbers',
-				'email.required' => 'Email is Required',
-				'address_line1.required' => 'Address Line 1 is Required',
-				'address_line1.max' => 'Maximum 255 Characters',
-				'address_line1.min' => 'Minimum 3 Characters',
-				'address_line2.max' => 'Maximum 255 Characters',
-				'pincode.required' => 'Pincode is Required',
-				'pincode.max' => 'Maximum 6 Characters',
-				'pincode.min' => 'Minimum 6 Characters',
+				'name.unique' => 'Policy name is Already taken',
 			];
 			$validator = Validator::make($request->all(), [
-				'code' => 'required|max:255|min:3',
-				'name' => 'required|max:255|min:3',
-				'mobile_no' => 'required|max:25',
-				'email' => 'required',
-				'address_line1' => 'required|max:255|min:3',
-				'address_line2' => 'max:255',
-				'pincode' => 'required|max:6|min:6',
+				'code' => [
+					'required',
+					'max:255',
+					'min:3',
+					'unique:warranty_policies,code,' . $request->id . ',id,company_id,' . Auth::user()->company_id,
+				],
+				'name' => [
+					'required',
+					'max:255',
+					'min:3',
+					'unique:warranty_policies,name,' . $request->id . ',id,company_id,' . Auth::user()->company_id,
+				],
 			], $error_messages);
 			if ($validator->fails()) {
 				return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
 			}
 
+			if (!empty($request->policy_details)) {
+				foreach ($request->policy_details as $policy_detail) {
+					$validator = Validator::make($policy_detail, [
+						'warranty_type_id' => 'required',
+						'duration' => 'required',
+						'duration_type_id' => 'required',
+						'more_info' => 'nullable|max:255',
+					]);
+					if ($validator->fails()) {
+						return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
+					}
+				}
+			}
+
 			DB::beginTransaction();
 			if (!$request->id) {
-				$customer = new Customer;
-				$address = new Address;
+				$warranty_policy = new WarrantyPolicy;
+				$warranty_policy->created_by_id = Auth::user()->id;
+				$warranty_policy->created_at = Carbon::now();
 			} else {
-				$customer = Customer::find($request->id);
-				$address = Address::where('address_of_id', 24)->where('entity_id', $request->id)->first();
+				$warranty_policy = WarrantyPolicy::withTrashed()->find($request->id);
+				$warranty_policy->updated_by_id = Auth::user()->id;
+				$warranty_policy->updated_at = Carbon::now();
 			}
-			$customer->fill($request->all());
-			$customer->company_id = Auth::user()->company_id;
-			$customer->save();
+			$warranty_policy->fill($request->all());
+			$warranty_policy->company_id = Auth::user()->company_id;
+			if ($request->status == 'Inactive') {
+				$warranty_policy->deleted_by_id = Auth::user()->id;
+				$warranty_policy->deleted_at = Carbon::now();
+			} else {
+				$warranty_policy->deleted_by_id = NULL;
+				$warranty_policy->deleted_at = NULL;
+			}
+			$warranty_policy->save();
 
-			$address->fill($request->all());
-			$address->company_id = Auth::user()->company_id;
-			$address->address_of_id = 24;
-			$address->entity_id = $customer->id;
-			$address->address_type_id = 40;
-			$address->name = 'Primary Address';
-			$address->save();
+			if (!empty($request->policy_details)) {
+				foreach ($request->policy_details as $policy_details) {
+					$warranty_policy_details = WarrantyPolicyDetail::firstOrNew(['id' => $policy_details['id']]);
+					$warranty_policy_details->warranty_policy_id = $warranty_policy->id;
+					$warranty_policy_details->fill($policy_details);
+					$warranty_policy_details->save();
+				}
+			}
 
 			DB::commit();
 			if (!($request->id)) {
-				return response()->json(['success' => true, 'message' => ['Customer Details Added Successfully']]);
+				return response()->json(['success' => true, 'message' => ['Warranty Policy Added Successfully']]);
 			} else {
-				return response()->json(['success' => true, 'message' => ['Customer Details Updated Successfully']]);
+				return response()->json(['success' => true, 'message' => ['Warranty Policy Updated Successfully']]);
 			}
 		} catch (Exceprion $e) {
 			DB::rollBack();

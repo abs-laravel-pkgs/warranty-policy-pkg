@@ -4,12 +4,14 @@ namespace Abs\WarrantyPolicyPkg;
 
 use App\Company;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WarrantyPolicy extends Model {
 	protected $table = 'warranty_policies';
-	public $timestamps = false;
+	use SoftDeletes;
 	protected $fillable = [
 		'company_id',
+		'code',
 		'name',
 		'created_by_id',
 		'updated_by_id',
