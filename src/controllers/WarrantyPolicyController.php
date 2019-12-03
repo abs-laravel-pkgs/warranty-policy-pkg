@@ -34,11 +34,7 @@ class WarrantyPolicyController extends Controller {
 				$edit_active = asset('public/img/content/table/edit-yellow-active.svg');
 				$delete = asset('/public/img/content/table/delete-default.svg');
 				$delete_active = asset('/public/img/content/table/delete-active.svg');
-				$view = asset('public/img/content/table/eye.svg');
-				$view_active = asset('/public/img/content/table/eye-active.svg');
 				return '
-					<a href="#!/warranty-policy-pkg/warranty-policy/view/' . $warranty_policy_list->id . '" title="View" dusk="view-btn"><img src="' . $view . '" alt="View" class="img-responsive" onmouseover=this.src="' . $view_active . '" onmouseout=this.src="' . $view . '" >
-					</a>
 					<a href="#!/warranty-policy-pkg/warranty-policy/edit/' . $warranty_policy_list->id . '" title="Edit" dusk="edit-btn"><img src="' . $edit . '" alt="Edit" class="img-responsive" onmouseover=this.src="' . $edit_active . '" onmouseout=this.src="' . $edit . '" >
 					</a>
 					<a href="javascript:;" data-toggle="modal" data-target="#delete_warranty_policy"
@@ -100,6 +96,11 @@ class WarrantyPolicyController extends Controller {
 			}
 
 			if (!empty($request->policy_details)) {
+				$array_data = array_column($request->policy_details, 'warranty_type_id');
+				$array_data_unique = array_unique($array_data);
+				if (count($array_data) != count($array_data_unique)) {
+					return response()->json(['success' => false, 'errors' => ['Type is already taken']]);
+				}
 				foreach ($request->policy_details as $policy_detail) {
 					$validator = Validator::make($policy_detail, [
 						'warranty_type_id' => 'required',

@@ -75,7 +75,7 @@ app.component('warrantyPolicyList', {
                     setTimeout(function() {
                         $noty.close();
                     }, 3000);
-                    $('#warranty_policy_list').DataTable().ajax.reload(function(json) {});
+                    $('#warranty_policy').DataTable().ajax.reload(function(json) {});
                     $location.path('/warranty-policy-pkg/warranty-policy/list');
                 }
             });
@@ -172,7 +172,7 @@ app.component('warrantyPolicyForm', {
             },
             submitHandler: function(form) {
                 let formData = new FormData($(form_id)[0]);
-                $('#submit').button('loading');
+                $('.submit').button('loading');
                 $.ajax({
                         url: laravel_routes['saveWarrantyPolicy'],
                         method: "POST",
@@ -194,7 +194,7 @@ app.component('warrantyPolicyForm', {
                             $scope.$apply();
                         } else {
                             if (!res.success == true) {
-                                $('#submit').button('reset');
+                                $('.submit').button('reset');
                                 var errors = '';
                                 for (var i in res.errors) {
                                     errors += '<li>' + res.errors[i] + '</li>';
@@ -208,14 +208,14 @@ app.component('warrantyPolicyForm', {
                                     $noty.close();
                                 }, 3000);
                             } else {
-                                $('#submit').button('reset');
+                                $('.submit').button('reset');
                                 $location.path('/warranty-policy-pkg/warranty-policy/list');
                                 $scope.$apply();
                             }
                         }
                     })
                     .fail(function(xhr) {
-                        $('#submit').button('reset');
+                        $('.submit').button('reset');
                         $noty = new Noty({
                             type: 'error',
                             layout: 'topRight',
