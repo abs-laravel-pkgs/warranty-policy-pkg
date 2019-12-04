@@ -9,6 +9,7 @@ app.component('warrantyPolicyList', {
             "dom": dom_structure,
             "language": {
                 "search": "",
+                "searchPlaceholder": "Search",
                 "lengthMenu": "Rows Per Page _MENU_",
                 "paginate": {
                     "next": '<i class="icon ion-ios-arrow-forward"></i>',
