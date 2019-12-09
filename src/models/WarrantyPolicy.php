@@ -94,29 +94,36 @@ class WarrantyPolicy extends Model {
 					if (isset($this->warrantyPolicyDetails[$next_key])) {
 						if ($battery_used_days > $total_battery_warranty_days) {
 							$response['battery_status'] = 'Warranty expired';
+							$response['warranty_policy_detail_id'] = $warrantyPolicyDetail->id;
 						} else {
 							//FREE REPLACEMENT
 							if ($warrantyPolicyDetail->warranty_type_id == 7360) {
 								$response['battery_status'] = 'Free Replacement';
+								$response['warranty_policy_detail_id'] = $warrantyPolicyDetail->id;
 							} else {
 								$response['battery_status'] = $warrantyPolicyDetail->more_info;
+								$response['warranty_policy_detail_id'] = $warrantyPolicyDetail->id;
 							}
 						}
 					} else {
 						$response['battery_status'] = 'Warranty expired';
+						$response['warranty_policy_detail_id'] = $warrantyPolicyDetail->id;
 					}
 				} else {
 					//FREE REPLACEMENT
 					if ($warrantyPolicyDetail->warranty_type_id == 7360) {
 						$response['battery_status'] = 'Free Replacement';
+						$response['warranty_policy_detail_id'] = $warrantyPolicyDetail->id;
 					} else {
 						$response['battery_status'] = $warrantyPolicyDetail->more_info;
+						$response['warranty_policy_detail_id'] = $warrantyPolicyDetail->id;
 					}
 					break;
 				}
 			}
 		} else {
 			$response['battery_status'] = 'No policy found';
+			$response['warranty_policy_detail_id'] = '';
 		}
 		return $response;
 	}
