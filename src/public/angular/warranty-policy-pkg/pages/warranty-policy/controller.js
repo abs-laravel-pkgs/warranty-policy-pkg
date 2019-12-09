@@ -27,6 +27,7 @@ app.component('warrantyPolicyList', {
             },
             columns: [
                 { data: 'action', class: 'action', searchable: false },
+                { data: 'code', name: 'warranty_policies.code' },
                 { data: 'name', name: 'warranty_policies.name' },
                 { data: 'status', searchable: false },
             ],

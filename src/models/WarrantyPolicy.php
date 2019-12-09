@@ -29,6 +29,42 @@ class WarrantyPolicy extends Model {
 		return $interval->days;
 	}
 
+	public function getWarrantyPolicyEndDate($start_date) {
+		$response = array();
+		//GET WARRANTY POLICY DETAILS
+		if ($this->warrantyPolicyDetails) {
+			$total_battery_warranty_days = 0;
+			$warrantyPolicyDetail = $this->warrantyPolicyDetails()->first();
+			if (!$warrantyPolicyDetail) {
+				$response['success'] = false;
+				$response['end_date'] = '';
+				$response['error'] = 'No policy found';
+			} else {
+				if ($warrantyPolicyDetail->duration_type_id == 7260) {
+					$total_battery_warranty_days = intval($warrantyPolicyDetail->duration);
+					$warranty_period_end_date = date('d-m-Y', strtotime($start_date . ' + ' . $total_battery_warranty_days . ' days'));
+				} elseif ($warrantyPolicyDetail->duration_type_id == 7261) {
+					//DURATION TYPE WEEKS
+					$total_battery_warranty_days = 7 * intval($warrantyPolicyDetail->duration);
+					$warranty_period_end_date = date('d-m-Y', strtotime($start_date . ' + ' . $total_battery_warranty_days . ' days'));
+				} elseif ($warrantyPolicyDetail->duration_type_id == 7262) {
+					//DURATION TYPE MONTHS
+					$warranty_period_end_date = date('d-m-Y', strtotime("+" . intval($warrantyPolicyDetail->duration) . " months", strtotime($start_date)));
+				} elseif ($warrantyPolicyDetail->duration_type_id == 7263) {
+					//DURATION TYPE YEARS
+					$warranty_period_end_date = date('d-m-Y', strtotime("+" . intval($warrantyPolicyDetail->duration) . " year", strtotime($start_date)));
+				}
+				$response['success'] = true;
+				$response['end_date'] = $warranty_period_end_date;
+			}
+		} else {
+			$response['success'] = false;
+			$response['end_date'] = '';
+			$response['error'] = 'No policy found';
+		}
+		return $response;
+	}
+
 	public function getWarrantyPolicyDetailStatus($battery_billed_date_format, $battery_billed_date, $battery_used_days) {
 		$response = array();
 		//GET WARRANTY POLICY DETAILS
