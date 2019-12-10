@@ -22,7 +22,7 @@ class WarrantyPolicy extends Model {
 		return $this->hasMany('Abs\WarrantyPolicyPkg\WarrantyPolicyDetail', 'warranty_policy_id')->orderBy('priority', 'asc');
 	}
 
-	public function getDaysByTwoDates($date1, $date2) {
+	public function getDaysBetweenTwoDates($date1, $date2) {
 		$datetime1 = date_create($date1);
 		$datetime2 = date_create($date2);
 		$interval = date_diff($datetime1, $datetime2);
@@ -80,11 +80,11 @@ class WarrantyPolicy extends Model {
 				} elseif ($warrantyPolicyDetail->duration_type_id == 7262) {
 					//DURATION TYPE MONTHS
 					$warranty_period_end_date = date('d-m-Y', strtotime("+" . intval($warrantyPolicyDetail->duration) . " months", strtotime($battery_billed_date_format)));
-					$total_battery_warranty_days = $this->getDaysByTwoDates($battery_billed_date, $warranty_period_end_date);
+					$total_battery_warranty_days = $this->getDaysBetweenTwoDates($battery_billed_date, $warranty_period_end_date);
 				} elseif ($warrantyPolicyDetail->duration_type_id == 7263) {
 					//DURATION TYPE YEARS
 					$warranty_period_end_date = date('d-m-Y', strtotime("+" . intval($warrantyPolicyDetail->duration) . " year", strtotime($battery_billed_date_format)));
-					$total_battery_warranty_days = $this->getDaysByTwoDates($battery_billed_date, $warranty_period_end_date);
+					$total_battery_warranty_days = $this->getDaysBetweenTwoDates($battery_billed_date, $warranty_period_end_date);
 				}
 
 				//IF BATTERY USED DAYS EXCEED WARRANRY DAYS
