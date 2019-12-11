@@ -1,5 +1,5 @@
 app.config(['$routeProvider', function($routeProvider) {
-
+    alert('test');
     $routeProvider.
     //CUSTOMER
     when('/warranty-policy-pkg/warranty-policy/list', {
