@@ -1,7 +1,7 @@
 app.component('warrantyPolicyList', {
     templateUrl: warranty_ploicy_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location) {
-        $scope.loading = true;
+        alert(1);        $scope.loading = true;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
         var dataTable = $('#warranty_policy').DataTable({
