@@ -19,7 +19,7 @@ class WarrantyPolicy extends Model {
 	];
 
 	public function warrantyPolicyDetails() {
-		return $this->hasMany('Abs\WarrantyPolicyPkg\WarrantyPolicyDetail', 'warranty_policy_id')->orderBy('priority', 'asc');
+		return $this->hasMany('Abs\WarrantyPolicyPkg\WarrantyPolicyDetail', 'warranty_policy_id');
 	}
 
 	public function getDaysBetweenTwoDates($date1, $date2) {
@@ -34,7 +34,7 @@ class WarrantyPolicy extends Model {
 		//GET WARRANTY POLICY DETAILS
 		if ($this->warrantyPolicyDetails) {
 			$total_battery_warranty_days = 0;
-			$warrantyPolicyDetail = $this->warrantyPolicyDetails()->first();
+			$warrantyPolicyDetail = $this->warrantyPolicyDetails()->orderBy('priority', 'asc')->first();
 			if (!$warrantyPolicyDetail) {
 				$response['success'] = false;
 				$response['end_date'] = '';
@@ -88,7 +88,7 @@ class WarrantyPolicy extends Model {
 		$response = array();
 		//GET WARRANTY POLICY DETAILS
 		if ($this->warrantyPolicyDetails) {
-			foreach ($this->warrantyPolicyDetails as $key => $warrantyPolicyDetail) {
+			foreach ($this->warrantyPolicyDetails()->orderBy('priority', 'desc')->get() as $key => $warrantyPolicyDetail) {
 				//GET TOTAL BATTERY WARRANTY DAYS
 				$total_battery_warranty_days = $this->getTotalBatteryWarrantyDays($battery_billed_date_format, $battery_billed_date, $warrantyPolicyDetail);
 				//IF BATTERY USED DAYS EXCEED WARRANRY DAYS
@@ -99,7 +99,7 @@ class WarrantyPolicy extends Model {
 						continue;
 					} else {
 						$response['battery_status'] = 'Warranty expired';
-						$response['warranty_policy_detail_id'] = $warrantyPolicyDetail->id;
+						$response['warranty_policy_detail_id'] = -1;
 					}
 				} else {
 					//FREE REPLACEMENT
@@ -115,7 +115,7 @@ class WarrantyPolicy extends Model {
 			}
 		} else {
 			$response['battery_status'] = 'No policy found';
-			$response['warranty_policy_detail_id'] = '';
+			$response['warranty_policy_detail_id'] = -1;
 		}
 		return $response;
 	}
