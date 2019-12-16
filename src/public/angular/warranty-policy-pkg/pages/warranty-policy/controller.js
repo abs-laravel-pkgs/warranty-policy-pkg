@@ -2,6 +2,7 @@ app.component('warrantyPolicyList', {
     templateUrl: warranty_ploicy_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location) {
         $scope.loading = true;
+        //alert(123);
         var self = this;
         self.hasPermission = HelperService.hasPermission;
         var dataTable = $('#warranty_policy').DataTable({
@@ -43,7 +44,7 @@ app.component('warrantyPolicyList', {
 
         });
         /* Page Title Appended */
-        $('.page-header-content .display-inline-block .data-table-title').html('Warranty Policy List <span class="badge badge-secondary" id="table_info">0</span>');
+        $('.page-header-content .display-inline-block .data-table-title').html('Warranty Policies<span class="badge badge-secondary" id="table_info">0</span>');
         $('.page-header-content .search.display-inline-block .add_close_button').html('<button type="button" class="btn btn-img btn-add-close"><img src="' + image_scr2 + '" class="img-responsive"></button>');
         $('.page-header-content .refresh.display-inline-block').html('<button type="button" class="btn btn-refresh"><img src="' + image_scr3 + '" class="img-responsive"></button>');
         $('.add_new_button').html(

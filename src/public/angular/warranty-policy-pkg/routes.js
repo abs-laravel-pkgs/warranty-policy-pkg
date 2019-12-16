@@ -3,7 +3,7 @@ app.config(['$routeProvider', function($routeProvider) {
     //CUSTOMER
     when('/warranty-policy-pkg/warranty-policy/list', {
         template: '<warranty-policy-list></warranty-policy-list>',
-        title: 'Warranty Policies',
+        title: 'Warranty Policies List',
     }).
     when('/warranty-policy-pkg/warranty-policy/add', {
         template: '<warranty-policy-form></warranty-policy-form>',

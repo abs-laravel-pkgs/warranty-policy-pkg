@@ -128,12 +128,12 @@
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <input type="text" name="policy_details[{{index}}][more_info]" ng-model='policy_detail.more_info' class="form-control type-sm" placeholder="Enter More Info">
+                                                                                <input type="text" name="policy_details[{{index}}][more_info]" ng-model='policy_detail.more_info' class="form-control type-sm" placeholder="Enter More Info" maxlength="255">
                                                                             </div>
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group">
-                                                                                <input type="text" name="policy_details[{{index}}][priority]" ng-model='policy_detail.priority' class="form-control type-sm required" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Priority">
+                                                                                <input type="text" name="policy_details[{{index}}][priority]" ng-model='policy_detail.priority' class="form-control type-sm required" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Priority" min="1" max="999">
                                                                             </div>
                                                                         </td>
                                                                         <td>
