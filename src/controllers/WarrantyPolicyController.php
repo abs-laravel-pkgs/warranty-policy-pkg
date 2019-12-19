@@ -98,9 +98,9 @@ class WarrantyPolicyController extends Controller {
 			if (!empty($request->policy_details)) {
 				$array_data = array_column($request->policy_details, 'warranty_type_id');
 				$array_data_unique = array_unique($array_data);
-				if (count($array_data) != count($array_data_unique)) {
+				/*if (count($array_data) != count($array_data_unique)) {
 					return response()->json(['success' => false, 'errors' => ['Type is already taken']]);
-				}
+				}*/
 				foreach ($request->policy_details as $policy_detail) {
 					$validator = Validator::make($policy_detail, [
 						'warranty_type_id' => 'required',
