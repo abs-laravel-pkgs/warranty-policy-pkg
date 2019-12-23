@@ -112,9 +112,9 @@ class WarrantyPolicyController extends Controller {
 						'duration' => 'required',
 						'duration_type_id' => 'required',
 						'more_info' => 'nullable|max:255',
-						'priority'=>[
+						/*'priority'=>[
 							'unique:warranty_policy_details,priority,'. $policy_detail['id'] .',id,warranty_policy_id,' . $warranty_policy_id,
-						]
+						]*/
 					],$error_messages1);
 					if ($validator->fails()) {
 						return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);

@@ -34,7 +34,7 @@ class WarrantyPolicy extends Model {
 		//GET WARRANTY POLICY DETAILS
 		if ($this->warrantyPolicyDetails) {
 			$total_battery_warranty_days = 0;
-			$warrantyPolicyDetail = $this->warrantyPolicyDetails()->orderBy('priority', 'asc')->first();
+			$warrantyPolicyDetail = $this->warrantyPolicyDetails()->orderBy('priority', 'desc')->first();
 			if (!$warrantyPolicyDetail) {
 				$response['success'] = false;
 				$response['end_date'] = '';
@@ -88,7 +88,7 @@ class WarrantyPolicy extends Model {
 		$response = array();
 		//GET WARRANTY POLICY DETAILS
 		if ($this->warrantyPolicyDetails) {
-			foreach ($this->warrantyPolicyDetails()->orderBy('priority', 'desc')->get() as $key => $warrantyPolicyDetail) {
+			foreach ($this->warrantyPolicyDetails()->orderBy('priority', 'asc')->get() as $key => $warrantyPolicyDetail) {
 				//GET TOTAL BATTERY WARRANTY DAYS
 				$total_battery_warranty_days = $this->getTotalBatteryWarrantyDays($battery_billed_date_format, $battery_billed_date, $warrantyPolicyDetail);
 				//IF BATTERY USED DAYS EXCEED WARRANRY DAYS
