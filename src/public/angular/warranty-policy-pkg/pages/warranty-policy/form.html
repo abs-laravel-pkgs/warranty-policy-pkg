@@ -136,7 +136,7 @@
                                                                                 <input type="text" name="policy_details[{{index}}][priority]" ng-model='policy_detail.priority' class="form-control type-sm required" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Priority" min="1" max="999">
                                                                             </div>
                                                                         </td>
-                                                                        <td>
+                                                                        <td ng-show="index !='0'">
                                                                             <a href="javascript:;" ng-click="removePolicy(index,policy_detail.id)"><img src="./public/img/content/modal/close-circle-active.svg" class="img-fluid" alt="Delete"></a>
                                                                         </td>
                                                                     </tr>

@@ -65,7 +65,7 @@ class WarrantyPolicyController extends Controller {
 	}
 
 	public function saveWarrantyPolicy(Request $request) {
-		// dd($request->all());
+		//dd($request->all());
 		try {
 			$error_messages = [
 				'code.required' => 'Policy Code is Required',
@@ -94,20 +94,28 @@ class WarrantyPolicyController extends Controller {
 			if ($validator->fails()) {
 				return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
 			}
-
+			$warranty_policy_id=$request->id;
 			if (!empty($request->policy_details)) {
-				$array_data = array_column($request->policy_details, 'warranty_type_id');
+				//dd($request->policy_details);
+				$array_data = array_column($request->policy_details, 'priority');
 				$array_data_unique = array_unique($array_data);
-				/*if (count($array_data) != count($array_data_unique)) {
-					return response()->json(['success' => false, 'errors' => ['Type is already taken']]);
-				}*/
+				if (count($array_data) != count($array_data_unique)) {
+					return response()->json(['success' => false, 'errors' => ['Priority must be a unique values']]);
+				}
 				foreach ($request->policy_details as $policy_detail) {
+					$error_messages1=[
+						'priority.unique' =>'Priority must be a unique'
+					];
+					//dd($policy_detail,$warranty_policy_id);
 					$validator = Validator::make($policy_detail, [
 						'warranty_type_id' => 'required',
 						'duration' => 'required',
 						'duration_type_id' => 'required',
 						'more_info' => 'nullable|max:255',
-					]);
+						'priority'=>[
+							'unique:warranty_policy_details,priority,'. $policy_detail['id'] .',id,warranty_policy_id,' . $warranty_policy_id,
+						]
+					],$error_messages1);
 					if ($validator->fails()) {
 						return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
 					}

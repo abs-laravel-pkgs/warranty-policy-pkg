@@ -140,7 +140,7 @@ app.component('warrantyPolicyForm', {
 
         //REMOVE POLICY DETAILS 
         $scope.removePolicy = function(index, id) {
-            console.log(id, index);
+            //console.log(id, index);
             if (id) {
                 self.policy_detail_removal_id.push(id);
                 $('#policy_detail_removal_id').val(JSON.stringify(self.policy_detail_removal_id));
