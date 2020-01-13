@@ -1,3 +1,19 @@
+app.config(['$routeProvider', function($routeProvider) {
+    $routeProvider.
+    when('/warranty-policy-pkg/warranty-policy/list', {
+        template: '<warranty-policy-list></warranty-policy-list>',
+        title: 'Warranty Policies List',
+    }).
+    when('/warranty-policy-pkg/warranty-policy/add', {
+        template: '<warranty-policy-form></warranty-policy-form>',
+        title: 'Add Warranty Policy',
+    }).
+    when('/warranty-policy-pkg/warranty-policy/edit/:id', {
+        template: '<warranty-policy-form></warranty-policy-form>',
+        title: 'Edit Warranty Policy',
+    });
+}]);
+
 app.component('warrantyPolicyList', {
     templateUrl: warranty_ploicy_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location) {
