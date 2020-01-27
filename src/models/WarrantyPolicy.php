@@ -119,6 +119,31 @@ class WarrantyPolicy extends Model {
 		}
 		return $response;
 	}
+	public function getWarrantyPolicyDetailView($battery_billed_date_format, $battery_billed_date) {
+		$response = array();
+		$warranty_details=[];
+		//GET WARRANTY POLICY DETAILS
+		if ($this->warrantyPolicyDetails) {
+			foreach ($this->warrantyPolicyDetails()->orderBy('priority', 'asc')->get() as $key => $warrantyPolicyDetail) {
+				//GET TOTAL BATTERY WARRANTY DAYS
+				$total_battery_warranty_days = $this->getTotalBatteryWarrantyDays($battery_billed_date_format, $battery_billed_date, $warrantyPolicyDetail);
+				//IF BATTERY USED DAYS EXCEED WARRANRY DAYS
+
+					$warranty_details['more_info'][$key] = $warrantyPolicyDetail->more_info;
+					if($total_battery_warranty_days > 0){
+						$up_to_date=date('Y-m-d',strtotime("+".intval($total_battery_warranty_days)." day"));
+						$warranty_details['warranty_policy_upto_date'][$key] = $up_to_date;
+					}else{
+						$up_to_date=date('Y-m-d',strtotime("-".intval($total_battery_warranty_days)." day"));
+						$warranty_details['warranty_policy_upto_date'] [$key]= $up_to_date;
+					}
+			}
+		} else {
+			$warranty_details['more_info'] = '';
+			$warranty_details['warranty_policy_upto_date'] = '';
+		}
+		return $warranty_details;
+	}
 
 	public static function createFromCollection($records, $company = null, $specific_company = null, $tc) {
 		foreach ($records as $key => $record_data) {
