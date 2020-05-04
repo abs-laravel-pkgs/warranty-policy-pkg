@@ -40,12 +40,6 @@ class WarrantyPolicyPkgPermissionSeeder extends Seeder {
 
 		];
 
-		foreach ($permissions as $permission_id => $permsion) {
-			$permission = Permission::firstOrNew([
-				'id' => $permission_id,
-			]);
-			$permission->fill($permsion);
-			$permission->save();
-		}
+		Permission::createFromArrays($permissions);
 	}
 }
