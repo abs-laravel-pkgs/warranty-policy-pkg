@@ -11,25 +11,27 @@ class WarrantyPoliciesC extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('warranty_policies', function (Blueprint $table) {
-			$table->increments('id');
-			$table->unsignedInteger('company_id');
-			$table->string('code', 191);
-			$table->string('name', 191);
-			$table->unsignedInteger('created_by_id')->nullable();
-			$table->unsignedInteger('updated_by_id')->nullable();
-			$table->unsignedInteger('deleted_by_id')->nullable();
-			$table->timestamps();
-			$table->softdeletes();
+		if (!Schema::hasTable('warranty_policies')) {
+			Schema::create('warranty_policies', function (Blueprint $table) {
+				$table->increments('id');
+				$table->unsignedInteger('company_id');
+				$table->string('code', 191);
+				$table->string('name', 191);
+				$table->unsignedInteger('created_by_id')->nullable();
+				$table->unsignedInteger('updated_by_id')->nullable();
+				$table->unsignedInteger('deleted_by_id')->nullable();
+				$table->timestamps();
+				$table->softdeletes();
 
-			$table->foreign('company_id')->references('id')->on('companies')->onDelete('CASCADE')->onUpdate('cascade');
+				$table->foreign('company_id')->references('id')->on('companies')->onDelete('CASCADE')->onUpdate('cascade');
 
-			$table->foreign('created_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
-			$table->foreign('updated_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
-			$table->foreign('deleted_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
+				$table->foreign('created_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
+				$table->foreign('updated_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
+				$table->foreign('deleted_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
 
-			$table->unique(["company_id", "code"]);
-		});
+				$table->unique(["company_id", "code"]);
+			});
+		}
 	}
 
 	/**
